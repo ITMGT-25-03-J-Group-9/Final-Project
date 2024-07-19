@@ -5,5 +5,8 @@ from .models import CartItem
 
 # Register your models here.
 
-admin.site.register(Product)
-admin.site.register(CartItem)
+class ProductAdmin(admin.ModelAdmin):
+	list_display = ('name', 'price', 'image')  # Display fields in the list view
+	fields = ('name', 'price', 'image')  # Fields to display on the form page
+
+admin.site.register(Product, ProductAdmin)

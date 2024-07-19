@@ -1,16 +1,16 @@
 <h1>Login</h1>
 {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-            <li{% if messages.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
+	<ul class="messages">
+		{% for message in messages %}
+			<li{% if messages.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+		{% endfor %}
+	</ul>
 {% endif %}
-<form method="POST" action="#">
-    {% csrf_token %}
-    <label for="username">Username</label>
-    <input type="text" name="username">
-    <label for="password">Password</label>
-    <input type="password" name="password">
-    <input type="submit" value="Login">
+<form method="POST" action="{% url 'login_view' %}">
+	{% csrf_token %}
+	<label for="username">Username</label>
+	<input type="text" name="username" id="username" required>
+	<label for="password">Password</label>
+	<input type="password" name="password" id="password" required>
+	<input type="submit" value="Login">
 </form>

@@ -8,6 +8,7 @@ from django.contrib.auth import(
 )
 from django.contrib import messages
 import datetime as dt
+from django.shortcuts import get_object_or_404, redirect
 
 @login_required
 def index(request):
@@ -65,8 +66,15 @@ def checkout(request):
 	if request.method == 'GET':
 		template = loader.get_template("core/checkout.html")
 		cart_items = CartItem.objects.filter(user=request.user)
+        
+		total_price = 0
+		for item in cart_items:
+			item.total_price = item.product.price * item.quantity
+			total_price += item.total_price
+
 		context = {
-			'cart_items': list(cart_items),
+			'cart_items': cart_items,
+			'total_price': total_price,
 		}
 		return HttpResponse(template.render(context, request))
 	elif request.method == 'POST':
@@ -77,7 +85,7 @@ def checkout(request):
 		for cart_item in cart_items:
 			line_item = LineItem(
 				transaction=transaction,
- 				product=cart_item.product,
+				product=cart_item.product,
 				quantity=cart_item.quantity,
 			)
 			line_item.save()
@@ -88,7 +96,25 @@ def checkout(request):
 @login_required
 def transaction_history(request):
 	transactions = Transaction.objects.filter(user=request.user).order_by('-created_at')
+
+	for transaction in transactions:
+		total_price = sum(line_item.product.price * line_item.quantity for line_item in transaction.lineitem_set.all())
+		transaction.total_price = total_price
+
 	context = {
 		"transactions": transactions
 	}
 	return render(request, 'core/transaction_history.html', context)
+
+@login_required
+def remove_cart_item(request, cart_item_id):
+	if request.method == 'POST':
+		cart_item = get_object_or_404(CartItem, id=cart_item_id, user=request.user)
+		cart_item.delete()
+		return redirect('checkout')
+	else:
+ 		return redirect('checkout')
+
+def logout_view(request):
+    logout(request)
+    return redirect('login_view')

@@ -8,4 +8,6 @@ urlpatterns = [
 	path("accounts/login/", views.login_view, name="login_view"),
 	path("checkout", views.checkout, name="checkout"),
 	path("transaction_history/", views.transaction_history, name="transaction_history"),
+	path('remove-cart-item/<int:cart_item_id>/', views.remove_cart_item, name='remove_cart_item'),
+	path("logout/", views.logout_view, name="logout"),
 ]
