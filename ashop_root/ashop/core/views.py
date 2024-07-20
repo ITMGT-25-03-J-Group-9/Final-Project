@@ -11,6 +11,7 @@ import datetime as dt
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.admin.views.decorators import staff_member_required
 
 @login_required
 def index(request):
@@ -136,3 +137,11 @@ def register(request):
 		'form': form,
 	}
 	return HttpResponse(template.render(context, request))
+
+@staff_member_required
+def inventory_view(request):
+	products = Product.objects.all()
+	context = {
+		'products': products
+	}
+	return render(request, 'core/inventory.html', context)

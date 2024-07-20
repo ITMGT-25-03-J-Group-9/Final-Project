@@ -1,0 +1,11 @@
+{% extends "admin/base.html" %}
+
+{% block sidebar %}
+    {{ block.super }}
+    <div id="custom-admin-links">
+        <h3>Custom Admin Links</h3>
+        <ul>
+            <li><a href="{% url 'inventory_view' %}">Inventory</a></li>
+        </ul>
+    </div>
+{% endblock %}
