@@ -1,11 +1,9 @@
 from django.urls import path, include
 from django.contrib import admin
-from core.admin import admin_site
 
 from . import views # This . package just means "the current package; we are importing the sister file "views.py"
 
 urlpatterns = [
-	path('admin/', admin_site.urls),
 	path('register/', views.register, name='register'),
 	path("", views.index, name="index"),
 	path("product/<int:product_id>", views.product_detail, name="product_detail"),
