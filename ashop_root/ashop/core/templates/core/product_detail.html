@@ -1,16 +1,29 @@
 <h1>Product details</h1>
 <a href="/">Back to products</a>
-{% if product %}
-    <p>Product name: {{ product.name }}</p>
-    <p>Product price: {{ product.price }}</p>
-    <p>Available quantity: {{ max_quantity }}</p>
-{% endif %}
 
-<h2>Add to cart</h2>
-<form method="POST" action="#">
-    {% csrf_token %}
-    <input type="hidden" name="product_id" value="{{ product.id }}">
-    <label for="quantity">Quantity</label>
-    <input type="number" name="quantity" min="1" max="{{ max_quantity }}" value="1">
-    <input type="submit" value="Add to cart">
-</form>
+{% if product %}
+    <div style="display: flex; align-items: center;">
+        <!-- Product Image -->
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 300px; max-height: 300px; margin-right: 20px;">
+        {% else %}
+            <p>No image available</p>
+        {% endif %}
+
+        <!-- Product Details and Form -->
+        <div>
+            <p>Product name: {{ product.name }}</p>
+            <p>Product price: {{ product.price }}</p>
+            <p>Available quantity: {{ max_quantity }}</p>
+
+            <h2>Add to cart</h2>
+            <form method="POST" action="#">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <label for="quantity">Quantity</label>
+                <input type="number" name="quantity" min="1" max="{{ max_quantity }}" value="1">
+                <input type="submit" value="Add to cart">
+            </form>
+        </div>
+    </div>
+{% endif %}
