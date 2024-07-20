@@ -7,11 +7,11 @@ from .forms import ProductForm
 # Register your models here.
 
 class ProductAdmin(admin.ModelAdmin):
-	list_display = ('name', 'price', 'quantity', 'image')
-	fields = ('name', 'price', 'quantity', 'image')  
+	list_display = ('name', 'size', 'price', 'quantity', 'image')
+	fields = ('name', 'size', 'price', 'quantity', 'image')  
 	form = ProductForm
 	search_fields = ('name',)
-	list_filter = ('price',)
+	list_filter = ('price', 'size')
 
 class CartItemAdmin(admin.ModelAdmin):
 	list_display = ('user', 'product', 'quantity')

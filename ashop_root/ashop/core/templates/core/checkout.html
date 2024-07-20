@@ -15,6 +15,7 @@
 			<tr>
  				<td>{{ cart_item.product.name }}</td>
 				<td>{{ cart_item.quantity }}</td>
+				<td>{{ cart_item.product.get_size_display }}</td>
 				<td>₱{{ cart_item.total_price }}</td>
 				<td>
 					<form method="POST" action="{% url 'remove_cart_item' cart_item.id %}">
@@ -25,7 +26,7 @@
 			</tr>
 		{% endfor %}
 		<tr>
-			<td colspan="3">Total Price</td>
+			<td colspan="4">Total Price</td>
 			<td>₱{{ total_price }}</td>
 		</tr>
 	</table>

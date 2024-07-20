@@ -4,13 +4,20 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Product(models.Model):
+	SIZE_CHOICES = [
+		('S', 'Small'),
+		('M', 'Medium'),
+		('L', 'Large'),
+	]
+
 	name = models.CharField(max_length=50)
 	price = models.IntegerField()
 	image = models.ImageField(upload_to='product_images/', blank=True, null=True)
 	quantity = models.PositiveIntegerField(default=0)
+	size = models.CharFieldsize = models.CharField(max_length=1, choices=SIZE_CHOICES, default='M')
 
 	def __str__(self):
-		return self.name
+		return f'{self.name} ({self.get_size_display()})'
 
 class CartItem(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
@@ -31,7 +38,7 @@ class Transaction(models.Model):
         
 		for line_item in line_items:
 			product = line_item.product
-			product.quantity += line_item.quantity  # Re-add the quantity
+			product.quantity += line_item.quantity
 			product.save()
         
 		super().delete(*args, **kwargs)	
