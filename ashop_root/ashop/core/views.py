@@ -92,7 +92,11 @@ def checkout(request):
 				quantity=cart_item.quantity,
 			)
 			line_item.save()
-			cart_item.delete()
+			product = cart_item.product
+			product.quantity -= cart_item.quantity
+			product.save()
+		
+		cart_item.delete()
 		messages.add_message(request, messages.INFO, f'Thank you for your purchase!')
 		return redirect('index')
 
