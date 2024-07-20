@@ -7,7 +7,7 @@
 {% endif %}
 
 <h2>Add to cart</h2>
-<form method="POST" action="#">
+<form method="POST" action="{% url 'add_to_cart' %}">
     {% csrf_token %}
     <input type="hidden" name="product_id" value="{{ product.id }}">
     <label for="quantity">Quantity</label>
@@ -15,11 +15,12 @@
 
     <label for="size">Size</label>
     <select name="size">
-        <option value="S">Small</option>
-        <option value="M">Medium</option>
-        <option value="L">Large</option>
+        {% for size in product.size.all %}
+            <option value="{{ size.size_code }}">{{ size.size_name }}</option>
+        {% empty %}
+            <option value="">No sizes available</option>
+        {% endfor %}
     </select>
 
     <input type="submit" value="Add to cart">
-
 </form>
