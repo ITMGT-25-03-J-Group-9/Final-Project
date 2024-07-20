@@ -1,80 +1,138 @@
+{% load static %}
+<html lang="en">
 <head>
     <title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .header-image {
+            width: 100%;
+            max-height: 200px; /* Adjust as needed */
+            object-fit: cover;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for a nicer look */
+        }
+        .form-container label, .form-container input {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .form-container input[type="text"], .form-container input[type="password"] {
+            padding: 10px;
+            font-size: 1em;
+        }
+        .form-container input[type="submit"] {
+            padding: 10px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        .messages {
+            color: red;
+        }
+        .error-summary {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Register</h2>
-    <form method="post">
-        {% csrf_token %}
-        <div>
-            <label for="id_username">Username:</label>
-            {{ form.username }}
-            {% if form.username.errors %}
-                <ul>
-                    {% for error in form.username.errors %}
-                        {% if error == "This field is required." %}
-                            <li>Username is required.</li>
-                        {% elif error == "Ensure this value has at most 150 characters (it has more)."%}
-                            <li>Username must be 150 characters or fewer.</li>
-                        {% elif error == "Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters." %}
-                            <li>Username can only contain letters, numbers, and @/./+/-/_ characters.</li>
-                        {% else %}
-                            <li>{{ error }}</li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
-        <div>
-            <label for="id_password1">Password:</label>
-            {{ form.password1 }}
-            {% if form.password1.errors %}
-                <ul>
-                    {% for error in form.password1.errors %}
-                        {% if error == "This field is required." %}
-                            <li>Password is required.</li>
-                        {% elif error == "Your password can’t be too similar to your other personal information." %}
-                            <li>Your password can’t be too similar to your other personal information.</li>
-                        {% elif error == "This password is too short. It must contain at least 8 characters." %}
-                            <li>Your password must contain at least 8 characters.</li>
-                        {% elif error == "This password is too common." %}
-                            <li>Your password can’t be a commonly used password.</li>
-                        {% elif error == "This password is entirely numeric." %}
-                            <li>Your password can’t be entirely numeric.</li>
-                        {% else %}
-                            <li>{{ error }}</li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
-        <div>
-            <label for="id_password2">Password confirmation:</label>
-            {{ form.password2 }}
-            {% if form.password2.errors %}
-                <ul>
-                    {% for error in form.password2.errors %}
-                        {% if error == "This field is required." %}
-                            <li>Password confirmation is required.</li>
-                        {% elif error == "The two password fields didn’t match." %}
-                            <li>The two password fields didn’t match.</li>
-                        {% else %}
-                            <li>{{ error }}</li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
-        <button type="submit">Register</button>
-    </form>
-    <a href="{% url 'login_view' %}">Back to login</a>
-    {% if form.non_field_errors %}
-        <div class="errors">
-            <ul>
-                {% for error in form.non_field_errors %}
-                    <li>{{ error }}</li>
+    <div class="header">
+        <img src="{% static 'images/header.png' %}" alt="Header Image" class="header-image">
+        <h1>Register</h1>
+    </div>
+
+    <div class="form-container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
                 {% endfor %}
             </ul>
-        </div>
-    {% endif %}
+        {% endif %}
+        
+        <form method="post">
+            {% csrf_token %}
+            <div>
+                <label for="id_username">Username:</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <ul class="error-summary">
+                        {% for error in form.username.errors %}
+                            {% if error == "This field is required." %}
+                                <li>Username is required.</li>
+                            {% elif error == "Ensure this value has at most 150 characters (it has more)." %}
+                                <li>Username must be 150 characters or fewer.</li>
+                            {% elif error == "Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters." %}
+                                <li>Username can only contain letters, numbers, and @/./+/-/_ characters.</li>
+                            {% else %}
+                                <li>{{ error }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_password1">Password:</label>
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <ul class="error-summary">
+                        {% for error in form.password1.errors %}
+                            {% if error == "This field is required." %}
+                                <li>Password is required.</li>
+                            {% elif error == "Your password can’t be too similar to your other personal information." %}
+                                <li>Your password can’t be too similar to your other personal information.</li>
+                            {% elif error == "This password is too short. It must contain at least 8 characters." %}
+                                <li>Your password must contain at least 8 characters.</li>
+                            {% elif error == "This password is too common." %}
+                                <li>Your password can’t be a commonly used password.</li>
+                            {% elif error == "This password is entirely numeric." %}
+                                <li>Your password can’t be entirely numeric.</li>
+                            {% else %}
+                                <li>{{ error }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_password2">Password confirmation:</label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <ul class="error-summary">
+                        {% for error in form.password2.errors %}
+                            {% if error == "This field is required." %}
+                                <li>Password confirmation is required.</li>
+                            {% elif error == "The two password fields didn’t match." %}
+                                <li>The two password fields didn’t match.</li>
+                            {% else %}
+                                <li>{{ error }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="{% url 'login_view' %}">Login here</a>.</p>
+        {% if form.non_field_errors %}
+            <div class="error-summary">
+                <ul>
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
 </body>
 </html>
