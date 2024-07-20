@@ -29,13 +29,23 @@ def product_detail(request, product_id):
 		template = loader.get_template("core/product_detail.html")
 		p = Product.objects.get(id=product_id)
 		context = {
-			"product": p
+			"product": p,
+			"max_quantity": p.quantity
 		}
 		return HttpResponse(template.render(context, request))
 	elif request.method == 'POST':
-		submitted_quantity = request.POST['quantity']
+		submitted_quantity = int(request.POST['quantity'])
 		submitted_product_id = request.POST['product_id']
 		product = Product.objects.get(id=submitted_product_id)
+
+		if submitted_quantity > product.quantity:
+			messages.add_message(
+				request,
+				messages.ERROR,
+				f'Cannot add more than {product.quantity} of {product.name} to your cart.'
+			)
+			return redirect(request.path_info)
+
 		user = request.user
 		cart_item = CartItem(user=user, product=product, quantity=submitted_quantity)
 		cart_item.save()
