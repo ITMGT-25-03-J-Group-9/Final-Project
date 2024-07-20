@@ -1,29 +1,63 @@
-<h1>Product details</h1>
-<a href="/">Back to products</a>
+{% load static %}
+<html lang="en">
+<head>
+	<title>Product Details</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		.header-image {
+			width: 100%;
+			max-height: 200px; /* Adjust as needed */
+			object-fit: cover;
+		}
+		.header {
+			text-align: center;
+			margin-bottom: 20px;
+		}
+		.product-container {
+			display: flex;
+			align-items: center;
+			margin: 20px 0;
+		}
+		.product-image {
+			max-width: 300px;
+			max-height: 300px;
+			margin-right: 20px;
+		}
+	</style>
+</head>
+<body>
+	<div class="header">
+		<img src="{% static 'images/header.png' %}" alt="Header Image" class="header-image">
+		<h1>Product details</h1>
+	</div>
+	<a href="/">Back to products</a>
 
-{% if product %}
-    <div style="display: flex; align-items: center;">
-        <!-- Product Image -->
-        {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 300px; max-height: 300px; margin-right: 20px;">
-        {% else %}
-            <p>No image available</p>
-        {% endif %}
+	{% if product %}
+	    <div class="product-container">
+	        <!-- Product Image -->
+	        {% if product.image %}
+	            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+	        {% else %}
+	            <p>No image available</p>
+	        {% endif %}
 
-        <!-- Product Details and Form -->
-        <div>
-            <p>Product name: {{ product.name }}</p>
-            <p>Product price: {{ product.price }}</p>
-            <p>Available quantity: {{ max_quantity }}</p>
+	        <!-- Product Details and Form -->
+	        <div>
+	            <p>Product name: {{ product.name }}</p>
+	            <p>Product price: ₱{{ product.price }}</p>
+	            <p>Available quantity: {{ max_quantity }}</p>
 
-            <h2>Add to cart</h2>
-            <form method="POST" action="#">
-                {% csrf_token %}
-                <input type="hidden" name="product_id" value="{{ product.id }}">
-                <label for="quantity">Quantity</label>
-                <input type="number" name="quantity" min="1" max="{{ max_quantity }}" value="1">
-                <input type="submit" value="Add to cart">
-            </form>
-        </div>
-    </div>
-{% endif %}
+	            <h2>Add to cart</h2>
+	            <form method="POST" action="#">
+	                {% csrf_token %}
+	                <input type="hidden" name="product_id" value="{{ product.id }}">
+	                <label for="quantity">Quantity</label>
+	                <input type="number" name="quantity" min="1" max="{{ max_quantity }}" value="1">
+	                <input type="submit" value="Add to cart">
+	            </form>
+	        </div>
+	    </div>
+	{% endif %}
+</body>
+</html>

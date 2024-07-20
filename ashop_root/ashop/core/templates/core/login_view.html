@@ -1,17 +1,68 @@
-<h1>Login</h1>
-{% if messages %}
-	<ul class="messages">
-		{% for message in messages %}
-			<li{% if messages.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-		{% endfor %}
-	</ul>
-{% endif %}
-<form method="POST" action="{% url 'login_view' %}">
-	{% csrf_token %}
-	<label for="username">Username</label>
-	<input type="text" name="username" id="username" required>
-	<label for="password">Password</label>
-	<input type="password" name="password" id="password" required>
-	<input type="submit" value="Login">
-</form>
-<p>Don't have an account? <a href="{% url 'register' %}">Register here</a>.</p>
+{% load static %}
+<html lang="en">
+<head>
+	<title>Login</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		.header-image {
+			width: 100%;
+			max-height: 200px; /* Adjust as needed */
+			object-fit: cover;
+		}
+		.header {
+			text-align: center;
+			margin-bottom: 20px;
+		}
+		.form-container {
+			max-width: 400px;
+			margin: 0 auto;
+			padding: 20px;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+		}
+		.form-container label, .form-container input {
+			display: block;
+			width: 100%;
+			margin-bottom: 10px;
+		}
+		.form-container input[type="text"], .form-container input[type="password"] {
+			padding: 10px;
+			font-size: 1em;
+		}
+		.form-container input[type="submit"] {
+			padding: 10px;
+			font-size: 1em;
+			cursor: pointer;
+		}
+		.messages {
+			color: red;
+		}
+	</style>
+</head>
+<body>
+	<div class="header">
+		<img src="{% static 'images/header.png' %}" alt="Header Image" class="header-image">
+		<h1>Login</h1>
+	</div>
+
+	<div class="form-container">
+		{% if messages %}
+			<ul class="messages">
+				{% for message in messages %}
+					<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+		<form method="POST" action="{% url 'login_view' %}">
+			{% csrf_token %}
+			<label for="username">Username</label>
+			<input type="text" name="username" id="username" required>
+			<label for="password">Password</label>
+			<input type="password" name="password" id="password" required>
+			<input type="submit" value="Login">
+		</form>
+		<p>Don't have an account? <a href="{% url 'register' %}">Register here</a>.</p>
+	</div>
+</body>
+</html>

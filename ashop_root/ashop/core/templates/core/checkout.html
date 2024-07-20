@@ -1,38 +1,75 @@
 {% load custom_filters %}
-<h1>Checkout</h1>
-<a href="/">Back to products</a>
-<p>Hi, {{ user.username }}!</p>
+{% load static %}
+<html lang="en">
+<head>
+	<title>Checkout</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		.header-image {
+			width: 100%;
+			max-height: 200px; /* Adjust as needed */
+			object-fit: cover;
+		}
+		.header {
+			text-align: center;
+			margin-bottom: 20px;
+		}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+		th, td {
+			padding: 10px;
+			text-align: left;
+			border-bottom: 1px solid #ddd;
+		}
+		th {
+			background-color: #f2f2f2;
+		}
+	</style>
+</head>
+<body>
+	<div class="header">
+		<img src="{% static 'images/header.png' %}" alt="Header Image" class="header-image">
+		<h1>Checkout</h1>
+	</div>
 
-{% if cart_items %}
-	<table>
-		<tr>
-			<th>Product name</th>
-			<th>Quantity</th>
-			<th>Total Price</th>
-			<th>Action</th>
-		</tr>
-		{% for cart_item in cart_items %}
+	<a href="/">Back to products</a>
+	<p>Hi, {{ user.username }}!</p>
+
+	{% if cart_items %}
+		<table>
 			<tr>
- 				<td>{{ cart_item.product.name }}</td>
-				<td>{{ cart_item.quantity }}</td>
-				<td>₱{{ cart_item.total_price }}</td>
-				<td>
-					<form method="POST" action="{% url 'remove_cart_item' cart_item.id %}">
+				<th>Product name</th>
+				<th>Quantity</th>
+				<th>Total Price</th>
+				<th>Action</th>
+			</tr>
+			{% for cart_item in cart_items %}
+				<tr>
+ 					<td>{{ cart_item.product.name }}</td>
+					<td>{{ cart_item.quantity }}</td>
+					<td>₱{{ cart_item.total_price }}</td>
+					<td>
+						<form method="POST" action="{% url 'remove_cart_item' cart_item.id %}">
                         			{% csrf_token %}
                         			<input type="submit" value="Delete">
                     			</form>
                 		</td>
+				</tr>
+			{% endfor %}
+			<tr>
+				<td colspan="3">Total Price</td>
+				<td>₱{{ total_price }}</td>
 			</tr>
-		{% endfor %}
-		<tr>
-			<td colspan="3">Total Price</td>
-			<td>₱{{ total_price }}</td>
-		</tr>
-	</table>
-	<form method="POST" action="#">
-		{% csrf_token %}
-		<input type="submit" value="Checkout">
-	</form>
-{% else %}
-	<p>No cart items.</p>
-{% endif %}
+		</table>
+		<form method="POST" action="#">
+			{% csrf_token %}
+			<input type="submit" value="Checkout">
+		</form>
+	{% else %}
+		<p>No cart items.</p>
+	{% endif %}
+</body>
+</html>
