@@ -9,6 +9,8 @@ from django.contrib.auth import(
 from django.contrib import messages
 import datetime as dt
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
+from django.contrib.auth.forms import UserCreationForm
 
 @login_required
 def index(request):
@@ -116,5 +118,21 @@ def remove_cart_item(request, cart_item_id):
  		return redirect('checkout')
 
 def logout_view(request):
-    logout(request)
-    return redirect('login_view')
+	logout(request)
+	return redirect('login_view')
+
+def register(request):
+	if request.method == 'POST':
+		form = UserCreationForm(request.POST)
+		if form.is_valid():
+			form.save()
+			messages.add_message(request, messages.SUCCESS, 'Registration successful. Please log in.')
+			return redirect(reverse('login_view'))
+	else:
+		form = UserCreationForm()
+
+	template = loader.get_template('core/register.html')
+	context = {
+		'form': form,
+	}
+	return HttpResponse(template.render(context, request))
